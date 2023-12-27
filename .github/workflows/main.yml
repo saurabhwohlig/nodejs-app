@@ -30,7 +30,9 @@ jobs:
     - name: Login to Amazon ECR
       run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 704041984862.dkr.ecr.ap-south-1.amazonaws.com/nodejs-app
 
-   
+    - name: Debug Deployment YAML Before Modification
+      run: cat deployment.yml
+
     - name: Build Docker image
       run: |
         docker build -t 704041984862.dkr.ecr.ap-south-1.amazonaws.com/nodejs-app:${{ github.sha }} .
@@ -46,9 +48,9 @@ jobs:
         git checkout main
         git config --global user.email "saurabh.mishra@wohlig.com"
         git config --global user.name "saurabh"
-        yq e '.spec.template.spec.containers[0].image = 704041984862.dkr.ecr.ap-south-1.amazonaws.com/nodejs-app:${{github.sha}}' -i deployment.yml
+        yq e '.spec.template.spec.containers[0].image = "704041984862.dkr.ecr.ap-south-1.amazonaws.com/nodejs-app:${{github.sha}}"' -i deployment.yml
+        cat deployment.yml  # Print the modified YAML
+        git status
         git add .
         git commit -m "updating newer image"
         git push origin main
-
-
