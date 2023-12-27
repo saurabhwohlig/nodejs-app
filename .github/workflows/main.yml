@@ -29,7 +29,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t saurabhwohlig/myfirstrepo:github.sha .
+        docker build -t saurabhwohlig/myfirstrepo:${{ github.sha }} .
 
     - name: Push Docker image
       run: |
